@@ -2,7 +2,7 @@
 
 A curated set of ServiceNow utilities showcasing scoped Glide APIs, platform-safe patterns, and readable, reusable code.
 
-## TOC
+## Table of Contents
 
 * [Dynamically and Safely Inspect a Table’s Metadata](#dynamically-and-safely-inspect-a-tables-metadata)
 
