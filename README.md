@@ -2,23 +2,32 @@
 
 A curated set of ServiceNow utilities showcasing scoped Glide APIs, platform-safe patterns, and readable, reusable code.
 
-## Feature: Safely Inspect a Table’s Metadata
+## Table of Contents
 
-> :warning: **Requires ECMAScript 6**  
-> Background scripts in the **global scope** run in ES5 and will throw syntax errors.  
-> Run this in a **custom application scope**, which supports ES6 (let/const, arrow functions, etc.).
+* [Dynamically and Safely Inspect a Table’s Metadata](#dynamically-and-safely-inspect-a-tables-metadata)
 
+----
 
-Builds a complete **column data model** for any table using only **scoped** Glide APIs — no direct queries to system tables and no inserts.
+## Dynamically and Safely Inspect a Table’s Metadata
 
-### What it does
+### What It Does (High-level)
+
+Builds a complete **column data model** for any table using only **application scoped** Glide APIs, with no direct queries to system tables and no inserts.
+
+**Great for:** dynamic record operations, schema docs (e.g. data mapping workbooks for 3<sup>rd</sup> party integrations), integration design where sys_* tables are off-limits.
+
+### What It Does (Technical)
 - Spins up an in-memory **`GlideRecordSecure` scratchpad** to read field metadata safely.
 - Returns a structured model per column: label, internal type, max length, mandatory, inheritance source, auto/sys_id, virtual.
 - **References:** includes target table, display field, and class label.
 - **Choices:** enumerates display labels and values in order (skips `sys_class_name` to avoid table model morphing).
 - Produces a JSON-like object suitable for docs, generators, or integration mapping.
 
-**Great for:** dynamic record producers and record operations, schema docs, integration design where sys_* tables are off-limits.
+> **For domain-separated instances:** Because the platform resolves choice options through domain inheritance, using **application scoped** `setValue()` and `getDisplayValue()` against a GlideRecord ensures each option’s label and value are derived exactly as the UI presents them to the current user, rather than what’s returned by a direct `sys_choice` query.
+
+### Requirements
+
+`ECMAScript 6`, when run as a server side script. (Background scripts executed in the *global* application scope run in `ECMAScript 5`, which does not support `let`, `const`, arrow functions, etc.)
 
 <details>
 <summary>Sample Background Script</summary>
