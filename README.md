@@ -27,7 +27,7 @@ Builds a complete **column data model** for any table using only **application s
 
 ### Requirements
 
-`ECMAScript 6`, when run as a server side script. (Background scripts executed in the *global* application scope run in `ECMAScript 5`, which does not support `let`, `const`, arrow functions, etc.)
+`ECMAScript 12`, when run as a server side script. Background scripts executed in the *global* application scope run in `ECMAScript 5`, which does not support `let`, `const`, arrow functions, etc. To leverage this type of script in a script include, ensure `Turn on ECMAScript 2021 (ES12) mode` is set to **true**.
 
 <details>
 <summary>Sample Background Script</summary>
@@ -41,14 +41,14 @@ Builds a complete **column data model** for any table using only **application s
  * @returns {Object} An object containing metadata for each column, including label, type, length, mandatory status, inheritance, and choice/reference info.
  *
  * Example:
- * const model = getTableDataModelEcma6('incident');
+ * const model = getTableDataModelEcma12('incident');
  * gs.info(JSON.stringify(model, null, '\t'));
  */
 
-const model = getTableDataModelEcma6('incident');
+const model = getTableDataModelEcma12('incident');
 gs.info(JSON.stringify(model, null, '\t'));
 
-function getTableDataModelEcma6(pTable) {
+function getTableDataModelEcma12(pTable) {
 
     try {
 
