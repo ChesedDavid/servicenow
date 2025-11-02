@@ -1931,7 +1931,7 @@ function getTableDataModelEcma12(pTable) {
 
 Builds a complete **column data model** for any table using only **application-scoped** Glide APIs, with no direct queries to system tables and no inserts.
 
-> **Great for:** dynamic record operations, schema docs (e.g. data-mapping workbooks for third-party integrations), integration design where sys_* tables are off-limits.
+> **Great for:** dynamic record operations, schema docs (e.g. data-mapping workbooks for third-party integrations), integration design where `sys_*` tables are off-limits.
 
 ### What Are the Requirements?
 
