@@ -10,52 +10,6 @@ A curated set of ServiceNow utilities showcasing scoped Glide APIs, platform-saf
 
 ## Dynamically and Safely Inspect a Table’s Metadata
 
-### What Does It Do? (High-level)
-
-Builds a complete **column data model** for any table using only **application-scoped** Glide APIs, with no direct queries to system tables and no inserts.
-
-> **Great for:** dynamic record operations, schema docs (e.g. data-mapping workbooks for third-party integrations integrations), integration design where sys_* tables are off-limits.
-
-### What Are the Requirements?
-
-`ECMAScript 12`, when run as a server-side script. Background scripts executed in the *global* application scope run in `ECMAScript 5`, which does not support `let`, `const`, arrow functions, etc. To leverage this type of script in a server-side script, ensure `Turn on ECMAScript 2021 (ES12) mode` is set to **true**.
-
-### How Does It Do It? (Technical)
-
-- Spins up an in-memory **`GlideRecordSecure` scratchpad** to read field metadata safely.
-- Returns a structured model per column: label, internal type, max length, mandatory, inheritance source, auto/sys_id, virtual.
-- **References:** includes target table, display field, and class label.
-- **Choices:** enumerates display labels and values in order (skips `sys_class_name` to avoid table model morphing).
-- Produces a JSON-like object suitable for docs, generators, or integration mapping.
-
-> **For domain-separated instances:** Because the platform resolves choice options through domain inheritance, using **application scoped** `setValue()` and `getDisplayValue()` against a GlideRecord ensures each option’s label and value are derived exactly as the UI presents them to the current user, rather than what’s returned by a direct `sys_choice` query.
-
-#### Scoped Glide APIs Used by `getTableDataModelEcma12()`
-
-```mermaid
-mindmap
-  root(("<b>getTableDataModelEcma12()</b>"))
-    GlideRecordSecure(("<b>GlideRecordSecure()</b>"))
-        isValid("isValid()")
-        getClassDisplayValue("getClassDisplayValue()")
-        getDisplayName("getDisplayName()")
-        getElements("getElements()")
-        initialize("initialize()")
-        setValue("setValue()")
-        getDisplayValue("getDisplayValue()")
-        getElement(("<b>getElement()</b>"))
-            getTableName("getTableName()")
-            getChoices("getChoices()")
-            getReferenceTable("getReferenceTable()")
-            getED(("<b>getED()</b>"))
-                getInternalType("getInternalType()")
-                getLabel("getLabel()")
-                getLength("getLength()")
-                isMandatory("isMandatory()")
-                isAutoOrSysID("isAutoOrSysID()")
-                isVirtual("isVirtual()")
-```
-
 <details>
 <summary>Sample Background Script</summary>
 
@@ -1972,3 +1926,49 @@ function getTableDataModelEcma12(pTable) {
 
 ```
 </details>
+
+### What Does It Do? (High-level)
+
+Builds a complete **column data model** for any table using only **application-scoped** Glide APIs, with no direct queries to system tables and no inserts.
+
+> **Great for:** dynamic record operations, schema docs (e.g. data-mapping workbooks for third-party integrations integrations), integration design where sys_* tables are off-limits.
+
+### What Are the Requirements?
+
+`ECMAScript 12`, when run as a server-side script. Background scripts executed in the *global* application scope run in `ECMAScript 5`, which does not support `let`, `const`, arrow functions, etc. To leverage this type of script in a server-side script, ensure `Turn on ECMAScript 2021 (ES12) mode` is set to **true**.
+
+### How Does It Do It? (Technical)
+
+- Spins up an in-memory **`GlideRecordSecure` scratchpad** to read field metadata safely.
+- Returns a structured model per column: label, internal type, max length, mandatory, inheritance source, auto/sys_id, virtual.
+- **References:** includes target table, display field, and class label.
+- **Choices:** enumerates display labels and values in order (skips `sys_class_name` to avoid table model morphing).
+- Produces a JSON-like object suitable for docs, generators, or integration mapping.
+
+> **For domain-separated instances:** Because the platform resolves choice options through domain inheritance, using **application scoped** `setValue()` and `getDisplayValue()` against a GlideRecord ensures each option’s label and value are derived exactly as the UI presents them to the current user, rather than what’s returned by a direct `sys_choice` query.
+
+#### Scoped Glide APIs Used by `getTableDataModelEcma12()`
+
+```mermaid
+mindmap
+  root(("<b>getTableDataModelEcma12()</b>"))
+    GlideRecordSecure(("<b>GlideRecordSecure()</b>"))
+        isValid("isValid()")
+        getClassDisplayValue("getClassDisplayValue()")
+        getDisplayName("getDisplayName()")
+        getElements("getElements()")
+        initialize("initialize()")
+        setValue("setValue()")
+        getDisplayValue("getDisplayValue()")
+        getElement(("<b>getElement()</b>"))
+            getTableName("getTableName()")
+            getChoices("getChoices()")
+            getReferenceTable("getReferenceTable()")
+            getED(("<b>getED()</b>"))
+                getInternalType("getInternalType()")
+                getLabel("getLabel()")
+                getLength("getLength()")
+                isMandatory("isMandatory()")
+                isAutoOrSysID("isAutoOrSysID()")
+                isVirtual("isVirtual()")
+```
